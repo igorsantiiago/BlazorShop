@@ -1,5 +1,9 @@
+using BlazorShop.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 {
+    builder.Services.AddDbContext<BlazorShopDbContext>();
     builder.Services.AddRazorPages();
     builder.Services.AddServerSideBlazor();
 }

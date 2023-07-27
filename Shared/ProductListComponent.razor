@@ -1,5 +1,3 @@
-@using System.Globalization
-
 <table>
     <thead>
         <tr>
@@ -30,7 +28,7 @@
         for (int i = 0; i < 50; i++)
         {
             _product.
-            Add(new Product(i + 1, $"Produto {i}", $"Descrição produto {i}", $"Image {i}", i * 14.75M, 1));
+            Add(new Product($"Produto {i}", $"Descrição produto {i}", i * 14.75M, 1));
         }
     }
 }

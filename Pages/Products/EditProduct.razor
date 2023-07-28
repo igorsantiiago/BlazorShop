@@ -1,14 +1,19 @@
-@page "/products/create"
-@using Microsoft.EntityFrameworkCore;
+@page "/products/edit/{id:int}"
 @inject BlazorShopDbContext _context
 @inject NavigationManager _navigationManager
+@using Microsoft.EntityFrameworkCore;
 
-<h1>Novo Produto</h1>
+<h1>@_model?.Name</h1>
 
 <EditForm Model="_model" OnValidSubmit="@HandleSubmitAsync">
 
     <DataAnnotationsValidator />
     <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="Id" class="form-label">Id</label>
+        <InputNumber readonly class="form-control" type="text" id="Id" @bind-Value="_model.Id" />
+    </div>
 
     <div class="mb-3">
         <label for="Name" class="form-label">Name</label>
@@ -27,7 +32,7 @@
 
     <div class="mb-3">
         <label for="CategoryId" class="form-label">Category</label>
-        <InputSelect id="categoryId" @bind-Value="_model.CategoryId" class="form-control">
+        <InputSelect class="form-control" id="CategoryId" @bind-Value="_model.CategoryId">
             @foreach (var category in _categories)
             {
                 <option value="@category.Id">@category.Name</option>
@@ -42,34 +47,43 @@
         </div>
     }
 
-    <button class="btn btn-success" type="submit">Create</button>
+    <button class="btn btn-success" type="submit">Atualizar</button>
 </EditForm>
 
 @code {
-
-    Product _model = new();
-    List<Category> _categories = new();
-    string? _errorMessage = null;
+    [Parameter]
+    public int Id { get; set; }
+    private Product? _model = new();
+    private List<Category> _categories = new();
+    private string? _errorMessage = null;
 
     protected override async Task OnInitializedAsync()
     {
-        _categories = await _context.Categories.AsNoTracking().ToListAsync();
+        _categories = await _context.Categories.AsNoTracking().OrderBy(x => x.Name).ToListAsync();
+        _model = await _context.Products.AsNoTracking().FirstOrDefaultAsync(x => x.Id == Id);
     }
 
-    async Task HandleSubmitAsync()
+    private async Task HandleSubmitAsync()
     {
         try
         {
-            await _context.Products.AddAsync(_model);
+            var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == Id);
+            if (product is null)
+                throw new Exception("Produto não encontrado");
+
+            product.Name = _model.Name;
+            product.Description = _model.Description;
+            product.Price = _model.Price;
+            product.CategoryId = _model.CategoryId;
+
+            _context.Products.Update(product);
             await _context.SaveChangesAsync();
+
             _navigationManager.NavigateTo("/products");
         }
-        catch (Exception e)
+        catch
         {
-            _errorMessage = e.Message;
-            _errorMessage = e.Source;
-            Console.WriteLine(e.InnerException);
-            @* _errorMessage = "Falha ao persistir os dados."; *@
+            _errorMessage = "Não foi possível atualizar os dados. Tente novamente mais tarde.";
         }
     }
 }

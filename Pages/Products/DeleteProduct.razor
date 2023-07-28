@@ -1,0 +1,64 @@
+@page "/products/delete/{id:int}"
+@inject BlazorShopDbContext _context
+@inject NavigationManager _navigationManager
+@using Microsoft.EntityFrameworkCore;
+
+<h1>Delete @_model?.Name ?</h1>
+
+@if (!string.IsNullOrEmpty(_errorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @_errorMessage
+    </div>
+}
+
+<EditForm Model="_model" OnValidSubmit="@HandleSubmitAsync">
+    <div class="mb-3">
+        <label for="Name" class="form-label">Name</label>
+        <InputText readonly class="form-control" type="text" id="Name" @bind-Value="_model.Name" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Description" class="form-label">Description</label>
+        <InputText readonly class="form-control" type="text" id="Description" @bind-Value="_model.Description" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Price" class="form-label">Price</label>
+        <InputNumber readonly class="form-control" type="number" id="Price" @bind-Value="_model.Price" />
+    </div>
+
+    <button class="btn btn-danger" type="submit">Delete</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Product? _model = new();
+    private string? _errorMessage = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _model = await _context.Products.AsNoTracking().FirstOrDefaultAsync(x => x.Id == Id);
+    }
+
+    private async Task HandleSubmitAsync()
+    {
+        try
+        {
+            var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == Id);
+            if (product is null)
+                throw new Exception("Produto não encontrado");
+
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+
+            _navigationManager.NavigateTo("/products");
+        }
+        catch
+        {
+            _errorMessage = "Não foi possível excluir o produto. Tente novamente mais tarde.";
+        }
+    }
+}

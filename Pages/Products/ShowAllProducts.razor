@@ -1,0 +1,41 @@
+@page "/products"
+@inject BlazorShopDbContext _context
+@using Microsoft.EntityFrameworkCore;
+
+<h1>Products</h1>
+<a href="products/create" class="btn btn-primary mb-4 mt-2"
+    style="background-color: #000; box-shadow: -2px 5px 10px -1px #000; border:none;"><i class="oi oi-plus"></i>
+    Create</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>Id</td>
+            <td>Nome</td>
+            <td>Preço</td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in _products)
+        {
+            <tr>
+                <td>@product.Id</td>
+                <td>@product.Name</td>
+                <td>@product.Price.ToString("C", new CultureInfo("pt-br"))</td>
+                <td>
+                    <a href="/products/edit/@product.Id" class="btn btn-outline-dark">Edit</a>
+                    <a href="/products/delete/@product.Id" class="btn btn-outline-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    List<Product> _products = new();
+    protected override async Task OnInitializedAsync()
+    {
+        _products = await _context.Products.AsNoTracking().ToListAsync();
+    }
+}

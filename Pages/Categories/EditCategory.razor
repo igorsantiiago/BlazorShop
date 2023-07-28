@@ -1,0 +1,63 @@
+@page "/categories/edit/{id:int}"
+@inject BlazorShopDbContext _context
+@inject NavigationManager _navigationManager
+@using Microsoft.EntityFrameworkCore;
+
+<h1>@_modelCategory?.Name</h1>
+
+<EditForm Model="_modelCategory" OnValidSubmit="@HandleSubmitAsync">
+
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="Id" class="form-label">Id</label>
+        <InputNumber readonly class="form-control" type="text" id="Id" @bind-Value="_modelCategory.Id" />
+    </div>
+    <div class="mb-3">
+        <label for="Name" class="form-label">Name</label>
+        <InputText class="form-control" type="text" id="Name" @bind-Value="_modelCategory.Name" />
+    </div>
+
+    <button class="btn btn-success" type="submit">Atualizar</button>
+
+    @if (!string.IsNullOrEmpty(_errorMessage))
+    {
+        <div class="alert alert-danger" role="alert">
+            @_errorMessage
+        </div>
+    }
+</EditForm>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private Category? _modelCategory = new();
+    private string? _errorMessage = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _modelCategory = await _context.Categories.AsNoTracking().FirstOrDefaultAsync(x => x.Id == Id);
+    }
+
+    private async Task HandleSubmitAsync()
+    {
+        try
+        {
+            var category = await _context.Categories.FirstOrDefaultAsync(x => x.Id == Id);
+            if (category is null)
+                throw new Exception("Categoria não encontrada");
+
+            category.Name = _modelCategory.Name;
+
+            _context.Categories.Update(category);
+            await _context.SaveChangesAsync();
+
+            _navigationManager.NavigateTo("/categories");
+        }
+        catch
+        {
+            _errorMessage = "Não foi possível atualizar os dados. Tente novamente mais tarde.";
+        }
+    }
+}

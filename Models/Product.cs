@@ -33,5 +33,5 @@ public class Product
     [Required]
     public int CategoryId { get; set; }
 
-    public Category Category { get; set; } = new();
+    public Category Category { get; set; } = null!;
 }

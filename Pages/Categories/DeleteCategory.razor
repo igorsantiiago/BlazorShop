@@ -3,7 +3,7 @@
 @inject NavigationManager _navigationManager
 @using Microsoft.EntityFrameworkCore;
 
-<h1>Delete @_model?.Name ?</h1>
+<h1>Deletar @_model?.Name ?</h1>
 
 @if (!string.IsNullOrEmpty(_errorMessage))
 {
@@ -18,11 +18,11 @@
         <InputNumber readonly class="form-control" type="text" id="Id" @bind-Value="_model.Id" />
     </div>
     <div class="mb-3">
-        <label for="Name" class="form-label">Name</label>
+        <label for="Name" class="form-label">Nome</label>
         <InputText readonly class="form-control" type="text" id="Name" @bind-Value="_model.Name" />
     </div>
 
-    <button class="btn btn-danger" type="submit">Delete</button>
+    <button class="btn btn-danger" type="submit">Deletar</button>
 </EditForm>
 
 @code {

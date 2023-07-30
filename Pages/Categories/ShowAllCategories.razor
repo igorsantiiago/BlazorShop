@@ -2,10 +2,10 @@
 @inject BlazorShopDbContext _context
 @using Microsoft.EntityFrameworkCore;
 
-<h1>Categories</h1>
+<h1>Categorias</h1>
 <a href="categories/create" class="btn btn-primary mb-4 mt-2"
     style="background-color: #000; box-shadow: -2px 5px 10px -1px #000; border:none;"><i class="oi oi-plus"></i>
-    Create</a>
+    Criar</a>
 
 <table class="table">
     <thead>
@@ -22,8 +22,8 @@
                 <td>@category.Id</td>
                 <td>@category.Name</td>
                 <td>
-                    <a href="/categories/edit/@category.Id" class="btn btn-outline-dark">Edit</a>
-                    <a href="/categories/delete/@category.Id" class="btn btn-outline-danger">Delete</a>
+                    <a href="/categories/edit/@category.Id" class="btn btn-outline-dark">Editar</a>
+                    <a href="/categories/delete/@category.Id" class="btn btn-outline-danger">Deletar</a>
                 </td>
             </tr>
         }

@@ -16,22 +16,22 @@
     </div>
 
     <div class="mb-3">
-        <label for="Name" class="form-label">Name</label>
+        <label for="Name" class="form-label">Nome</label>
         <InputText class="form-control" type="text" id="Name" @bind-Value="_model.Name" />
     </div>
 
     <div class="mb-3">
-        <label for="Description" class="form-label">Description</label>
+        <label for="Description" class="form-label">Descrição</label>
         <InputText class="form-control" type="text" id="Description" @bind-Value="_model.Description" />
     </div>
 
     <div class="mb-3">
-        <label for="Price" class="form-label">Price</label>
+        <label for="Price" class="form-label">Preço</label>
         <InputNumber class="form-control" type="number" id="Price" @bind-Value="_model.Price" />
     </div>
 
     <div class="mb-3">
-        <label for="CategoryId" class="form-label">Category</label>
+        <label for="CategoryId" class="form-label">Categoria</label>
         <InputSelect class="form-control" id="CategoryId" @bind-Value="_model.CategoryId">
             @foreach (var category in _categories)
             {

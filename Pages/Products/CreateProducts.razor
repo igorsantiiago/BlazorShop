@@ -11,22 +11,22 @@
     <ValidationSummary />
 
     <div class="mb-3">
-        <label for="Name" class="form-label">Name</label>
+        <label for="Name" class="form-label">Nome</label>
         <InputText class="form-control" type="text" id="Name" @bind-Value="_model.Name" />
     </div>
 
     <div class="mb-3">
-        <label for="Description" class="form-label">Description</label>
+        <label for="Description" class="form-label">Descrição</label>
         <InputText class="form-control" type="text" id="Description" @bind-Value="_model.Description" />
     </div>
 
     <div class="mb-3">
-        <label for="Price" class="form-label">Price</label>
+        <label for="Price" class="form-label">Preço</label>
         <InputNumber class="form-control" type="number" id="Price" @bind-Value="_model.Price" />
     </div>
 
     <div class="mb-3">
-        <label for="CategoryId" class="form-label">Category</label>
+        <label for="CategoryId" class="form-label">Categoria</label>
         <InputSelect id="categoryId" @bind-Value="_model.CategoryId" class="form-control">
             @foreach (var category in _categories)
             {
@@ -42,7 +42,7 @@
         </div>
     }
 
-    <button class="btn btn-success" type="submit">Create</button>
+    <button class="btn btn-success" type="submit">Criar</button>
 </EditForm>
 
 @code {
@@ -66,10 +66,7 @@
         }
         catch (Exception e)
         {
-            _errorMessage = e.Message;
-            _errorMessage = e.Source;
-            Console.WriteLine(e.InnerException);
-            @* _errorMessage = "Falha ao persistir os dados."; *@
+            _errorMessage = "Falha ao persistir os dados.";
         }
     }
 }
